@@ -1,0 +1,70 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datascience-adf"
+		},
+		"ADLSGen2_LinkedService_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datasciencestoragelab.dfs.core.windows.net"
+		},
+		"BlobStorage_LinkedService_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "blob-storage-connection-secret"
+		},
+		"KeyVault_LinkedService_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://Datascience-KeyVault001.vault.azure.net/"
+		},
+		"SQLDB_LinkedService_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "sql-connection-secret"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datascience-adf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"KeyVault_LinkedService_properties_typeProperties_baseUrl": {
+						"value": "[parameters('KeyVault_LinkedService_properties_typeProperties_baseUrl')]"
+					},
+					"ADLSGen2_LinkedService_properties_typeProperties_url": {
+						"value": "[parameters('ADLSGen2_LinkedService_properties_typeProperties_url')]"
+					},
+					"BlobStorage_LinkedService_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('BlobStorage_LinkedService_properties_typeProperties_connectionString_secretName')]"
+					},
+					"SQLDB_LinkedService_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('SQLDB_LinkedService_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

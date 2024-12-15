@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datascience-adf"
+		},
+		"ADLSGen2_LinkedService_properties_typeProperties_url": {
+			"value": "https://datasciencestoragelab.dfs.core.windows.net"
+		},
+		"BlobStorage_LinkedService_properties_typeProperties_connectionString_secretName": {
+			"value": "blob-storage-connection-secret"
+		},
+		"KeyVault_LinkedService_properties_typeProperties_baseUrl": {
+			"value": "https://Datascience-KeyVault001.vault.azure.net/"
+		},
+		"SQLDB_LinkedService_properties_typeProperties_connectionString_secretName": {
+			"value": "sql-connection-secret"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
