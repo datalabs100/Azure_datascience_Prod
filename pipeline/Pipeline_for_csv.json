@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CSV_to_Paquet",
+				"name": "CSV_to_Parquet",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -49,60 +49,18 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Input_CSV_Version1",
-						"type": "DatasetReference",
-						"parameters": {
-							"year": {
-								"value": "@pipeline().parameters.year",
-								"type": "Expression"
-							},
-							"month": {
-								"value": "@pipeline().parameters.month",
-								"type": "Expression"
-							},
-							"day": {
-								"value": "@pipeline().parameters.day",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "Input_csv_version_1",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "Output_parquet_Version1",
-						"type": "DatasetReference",
-						"parameters": {
-							"year": {
-								"value": "@pipeline().parameters.year",
-								"type": "Expression"
-							},
-							"month": {
-								"value": "@pipeline().parameters.month",
-								"type": "Expression"
-							},
-							"day": {
-								"value": "@pipeline().parameters.day",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "Output_parquet_version_2",
+						"type": "DatasetReference"
 					}
 				]
 			}
 		],
-		"parameters": {
-			"year": {
-				"type": "string",
-				"defaultValue": "@utcnow('yyyy')"
-			},
-			"month": {
-				"type": "string",
-				"defaultValue": "@utcnow('MMM')"
-			},
-			"day": {
-				"type": "string",
-				"defaultValue": "@utcnow('dd')"
-			}
-		},
 		"annotations": []
 	}
 }
