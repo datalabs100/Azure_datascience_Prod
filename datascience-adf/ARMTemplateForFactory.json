@@ -35,7 +35,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "CSV_to_Paquet",
+						"name": "CSV_to_Parquet",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -81,42 +81,16 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "Input_CSV_Version1",
+								"referenceName": "Input_csv_version_1",
 								"type": "DatasetReference",
-								"parameters": {
-									"year": {
-										"value": "@pipeline().parameters.year",
-										"type": "Expression"
-									},
-									"month": {
-										"value": "@pipeline().parameters.month",
-										"type": "Expression"
-									},
-									"day": {
-										"value": "@pipeline().parameters.day",
-										"type": "Expression"
-									}
-								}
+								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "Output_parquet_Version1",
+								"referenceName": "Output_parquet_version_2",
 								"type": "DatasetReference",
-								"parameters": {
-									"year": {
-										"value": "@pipeline().parameters.year",
-										"type": "Expression"
-									},
-									"month": {
-										"value": "@pipeline().parameters.month",
-										"type": "Expression"
-									},
-									"day": {
-										"value": "@pipeline().parameters.day",
-										"type": "Expression"
-									}
-								}
+								"parameters": {}
 							}
 						]
 					}
@@ -124,29 +98,15 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"parameters": {
-					"year": {
-						"type": "string",
-						"defaultValue": "@utcnow('yyyy')"
-					},
-					"month": {
-						"type": "string",
-						"defaultValue": "@utcnow('MMM')"
-					},
-					"day": {
-						"type": "string",
-						"defaultValue": "@utcnow('dd')"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Input_CSV_Version1')]",
-				"[concat(variables('factoryId'), '/datasets/Output_parquet_Version1')]"
+				"[concat(variables('factoryId'), '/datasets/Input_csv_version_1')]",
+				"[concat(variables('factoryId'), '/datasets/Output_parquet_version_2')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Input_CSV_Version1')]",
+			"name": "[concat(parameters('factoryName'), '/Input_csv_version_1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -154,33 +114,20 @@
 					"referenceName": "BlobStorage_LinkedService",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"year": {
-						"type": "string"
-					},
-					"month": {
-						"type": "string"
-					},
-					"day": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": ".*csv",
-						"folderPath": {
-							"value": "landing/Full_load/@{dataset().year}/@{dataset().month}/@{dataset().day}\n",
-							"type": "Expression"
-						},
+						"folderPath": "landing/Full_load/2024/Dec/15",
 						"container": "input"
 					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
+					"columnDelimiter": "Comma (,)",
+					"encodingName": "UTF-8",
+					"escapeChar": "Backslash (\\)",
 					"firstRowAsHeader": true,
-					"quoteChar": "\""
+					"quoteChar": "Double quote (\")"
 				},
 				"schema": [
 					{
@@ -206,7 +153,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Output_parquet_Version1')]",
+			"name": "[concat(parameters('factoryName'), '/Output_parquet_version_2')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -214,26 +161,12 @@
 					"referenceName": "ADLSGen2_LinkedService",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"year": {
-						"type": "string"
-					},
-					"month": {
-						"type": "string"
-					},
-					"day": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "bronze/Full_load/@{dataset().year}/@{dataset().month}/@{dataset().day}\n",
-							"type": "Expression"
-						},
+						"folderPath": "bronze/Full_load",
 						"fileSystem": "output"
 					},
 					"compressionCodec": "snappy"
