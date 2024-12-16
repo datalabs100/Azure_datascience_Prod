@@ -54,7 +54,6 @@
 									"recursive": true,
 									"modifiedDatetimeStart": null,
 									"modifiedDatetimeEnd": null,
-									"wildcardFileName": ".*csv",
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -121,7 +120,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": ".*csv",
+						"fileName": "Products.csv",
 						"folderPath": "landing/Full_load/2024/Dec/15",
 						"container": "input"
 					},
