@@ -29,13 +29,13 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_V1')]",
+			"name": "[concat(parameters('factoryName'), '/Pipeline_for_csv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_data_V1",
+						"name": "CSV_to_Parquet",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -52,8 +52,7 @@
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
-									"modifiedDatetimeStart": null,
-									"modifiedDatetimeEnd": null,
+									"wildcardFileName": "*.csv",
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -82,14 +81,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "Input_csv_V1",
+								"referenceName": "csv_source",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "Output_parquet_V1",
+								"referenceName": "csv_to_parquet_sink",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -102,12 +101,12 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Input_csv_V1')]",
-				"[concat(variables('factoryId'), '/datasets/Output_parquet_V1')]"
+				"[concat(variables('factoryId'), '/datasets/csv_source')]",
+				"[concat(variables('factoryId'), '/datasets/csv_to_parquet_sink')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Input_csv_V1')]",
+			"name": "[concat(parameters('factoryName'), '/csv_source')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -120,15 +119,16 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "Products.csv",
-						"folderPath": "landing/Full_load/2024/Dec/15",
+						"folderPath": {
+							"value": "@{concat('landing/Full_load/', formatDateTime(utcNow(),'yyyy'),'/',formatDateTime(utcNow(),'MMM'),'/',formatDateTime(utcNow(),'dd'))}",
+							"type": "Expression"
+						},
 						"container": "input"
 					},
-					"columnDelimiter": "Comma (,)",
-					"encodingName": "UTF-8",
-					"escapeChar": "Backslash (\\)",
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
 					"firstRowAsHeader": true,
-					"quoteChar": "Double quote (\")"
+					"quoteChar": "\""
 				},
 				"schema": [
 					{
@@ -140,11 +140,7 @@
 						"type": "String"
 					},
 					{
-						"name": "ContactNumber",
-						"type": "String"
-					},
-					{
-						"name": "City",
+						"name": "Email",
 						"type": "String"
 					}
 				]
@@ -154,7 +150,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Output_parquet_V1')]",
+			"name": "[concat(parameters('factoryName'), '/csv_to_parquet_sink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -167,7 +163,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "bronze/Full_load",
+						"folderPath": {
+							"value": "bronze/Full_load/@{formatDateTime(utcNow(), 'yyyy')}/@{formatDateTime(utcNow(), 'MMM')}/@{formatDateTime(utcNow(),'dd')}",
+							"type": "Expression"
+						},
 						"fileSystem": "output"
 					},
 					"compressionCodec": "snappy"
