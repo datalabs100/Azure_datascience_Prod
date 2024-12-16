@@ -1,0 +1,20 @@
+{
+	"name": "Output_parquet_V1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLSGen2_LinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "bronze",
+				"fileSystem": "output"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
