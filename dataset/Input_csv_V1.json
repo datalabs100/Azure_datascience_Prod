@@ -10,14 +10,15 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Customers.csv",
+				"fileName": ".*csv",
 				"folderPath": "landing/Full_load/2024/Dec/15",
 				"container": "input"
 			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
+			"columnDelimiter": "Comma (,)",
+			"encodingName": "Default(UTF-8)",
+			"escapeChar": "Backslash (\\)",
 			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"quoteChar": "Double quote (\")"
 		},
 		"schema": [
 			{

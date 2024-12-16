@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "bronze",
+				"folderPath": "bronze/Full_load",
 				"fileSystem": "output"
 			},
 			"compressionCodec": "snappy"
